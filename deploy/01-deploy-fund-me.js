@@ -38,14 +38,19 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         from: deployer,
         args: args, // put priceFeedAddress
         log: true,
-        waitConfirmations: network.config.blockConfirmations || 1
+        waitConfirmations: network.config.blockConfirmations || 1,
     })
 
-    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+    if (
+        !developmentChains.includes(network.name) &&
+        process.env.ETHERSCAN_API_KEY
+    ) {
         // args are the arguments to pass to the constructor of the contract we're veryfing
         await verify(fundMe.address, args)
     }
-    log("------------------------------------------------------------------------------------------------------------------")
+    log(
+        "------------------------------------------------------------------------------------------------------------------"
+    )
 }
 
 module.exports.tags = ["all", "fundme"]

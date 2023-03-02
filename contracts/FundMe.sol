@@ -72,7 +72,7 @@ contract FundMe {
     function fund() public payable {
         require(
             msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD,
-            "Didn't send enough"
+            "You need to spend more ETH!"
         ); // 1e18 = 1 * 10 ** 18 = 1 ETH = 1000000000000000000 Wei
         s_funders.push(msg.sender);
         s_addressToAmountFunded[msg.sender] += msg.value;
@@ -91,7 +91,7 @@ contract FundMe {
         (bool callSuccess, ) = payable(msg.sender).call{
             value: address(this).balance
         }("");
-        require(callSuccess, "Send failed: more than 2300 gas needed");
+        require(callSuccess);
     }
 
     function cheaperWithdraw() public payable onlyOwner {
@@ -109,7 +109,7 @@ contract FundMe {
         (bool callSuccess, ) = i_owner.call{
             value: address(this).balance
         }("");
-        require(callSuccess, "Send failed: more than 2300 gas needed");
+        require(callSuccess);
     }
 
     function getOwner() public view returns(address) {
